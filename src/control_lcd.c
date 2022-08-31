@@ -45,19 +45,6 @@ void typeln(const char *s);
 void typeChar(char val);
 int fd;  // seen by all subroutines
 
-void printTemperatures(float TI, float TR, float TE)   {
-  lcdLoc(LINE1);
-  typeln("TI:");
-  typeFloat(TI);
-  typeln("TR:");
-  typeFloat(TR);
-  lcdLoc(LINE2);
-  typeln("TE:");
-  typeFloat(TE);
-
-  delay(10000);
-}
-
 // float to string
 void typeFloat(float myFloat)   {
   char buffer[20];
@@ -88,7 +75,6 @@ void typeChar(char val)   {
 
   lcd_byte(val, LCD_CHR);
 }
-
 
 // this allows use of any size string
 void typeln(const char *s)   {
@@ -139,4 +125,19 @@ void lcd_init()   {
   lcd_byte(0x28, LCD_CMD); // Data length, number of lines, font size
   lcd_byte(0x01, LCD_CMD); // Clear display
   delayMicroseconds(500);
+}
+
+// Código autoral
+
+void printTemperatures(float TI, float TR, float TE)   {
+  lcdLoc(LINE1);
+  typeln("TI:");
+  typeFloat(TI);
+  typeln("TR:");
+  typeFloat(TR);
+  lcdLoc(LINE2);
+  typeln("TE:");
+  typeFloat(TE);
+
+  delay(1000);
 }

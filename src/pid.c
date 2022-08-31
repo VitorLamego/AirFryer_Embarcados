@@ -3,9 +3,9 @@
 
 double saida_medida, sinal_de_controle;
 double referencia = 0.0;
-double Kp = 0.0;  // Ganho Proporcional
-double Ki = 0.0;  // Ganho Integral
-double Kd = 0.0;  // Ganho Derivativo
+double Kp = 30.0;  // Ganho Proporcional
+double Ki = 0.2;  // Ganho Integral
+double Kd = 4000.0;  // Ganho Derivativo
 int T = 1.0;      // Período de Amostragem (ms)
 unsigned long last_time;
 double erro_total, erro_anterior = 0.0;
@@ -23,7 +23,8 @@ void pid_atualiza_referencia(float referencia_){
 }
 
 double pid_controle(double saida_medida){
-
+    printf("Referencia: %f\n", referencia);
+    printf("Temperatura Interna: %lf\n", saida_medida);
     double erro = referencia - saida_medida;
 
     erro_total += erro; // Acumula o erro (Termo Integral)
@@ -51,6 +52,7 @@ double pid_controle(double saida_medida){
     }
 
     erro_anterior = erro;
-
+    
+    printf("Sinal de Controle: %lf\n", sinal_de_controle);
     return sinal_de_controle;
 }

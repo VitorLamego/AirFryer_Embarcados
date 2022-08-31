@@ -10,6 +10,7 @@
 #include "../includes/uart.h"
 #include "../includes/bme280.h"
 #include "../includes/control_lcd.h"
+#include "../includes/pid.h"
 
 int i2c_filestream;
 
@@ -60,12 +61,14 @@ float getCurrentTemperature(struct bme280_dev *dev) {
   return comp_data.temperature;
 }
 
-void getTemperatures(int uart0_filestream, struct bme280_dev *dev) {
+float getTemperatures(int uart0_filestream, struct bme280_dev *dev) {
     float TI = requestToUart(uart0_filestream, TEMP_INT, 0);
     float TR = requestToUart(uart0_filestream, TEMP_REF, 0);
     float TE = getCurrentTemperature(dev);
 
+    pid_atualiza_referencia(TR);
     printTemperatures(TI, TR, TE);
+    return TI;
 }
 
 struct bme280_dev connectBme() {
