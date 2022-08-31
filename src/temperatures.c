@@ -62,8 +62,8 @@ float getCurrentTemperature(struct bme280_dev *dev) {
 }
 
 float getTemperatures(int uart0_filestream, struct bme280_dev *dev) {
-    float TI = requestToUart(uart0_filestream, TEMP_INT, 0);
-    float TR = requestToUart(uart0_filestream, TEMP_REF, 0);
+    float TI = requestTemperatureToUart(uart0_filestream, TEMP_INT);
+    float TR = requestTemperatureToUart(uart0_filestream, TEMP_REF);
     float TE = getCurrentTemperature(dev);
 
     pid_atualiza_referencia(TR);

@@ -28,7 +28,7 @@ int initUart(){
     return uart_filestream;
 }
 
-int readIntFromUart(int uart_filestream, unsigned char code){
+int readIntFromUart(int uart_filestream){
     unsigned char buffer[20];
     int number = -1;
 
@@ -42,14 +42,14 @@ int readIntFromUart(int uart_filestream, unsigned char code){
     else {
         buffer[content] = '\0';
         memcpy(&number, &buffer[3], sizeof(int));
-        printf("%f\n", number);
+        printf("Inteiro recebido: %d\n", number);
         return number;
     }
-    printf("%f\n", number);
+    printf("Inteiro recebido: %d\n", number);
     return number; 
 }
 
-float readFloatFromUart(int uart_filestream, unsigned char code) {
+float readFloatFromUart(int uart_filestream) {
     unsigned char buffer[20];
     float number = -1.0;
 
@@ -70,7 +70,7 @@ float readFloatFromUart(int uart_filestream, unsigned char code) {
     return number; 
 }
 
-float requestToUart(int uart_filestream, unsigned char code, int isIntReturn){
+float requestTemperatureToUart(int uart_filestream, unsigned char code){
     unsigned char package[7] = {0x01, 0x23, code, 0x00, 0x09, 0x00, 0x03};
     short crc = calcula_CRC(package, 7);
     int resultInt = 0;
@@ -84,8 +84,26 @@ float requestToUart(int uart_filestream, unsigned char code, int isIntReturn){
         printf("Ocorreu um erro na comunicação com o UART\n");
     }
     sleep(1);
-    if (isIntReturn) return readIntFromUart(uart_filestream, code);
-    else return readFloatFromUart(uart_filestream, code);
+    
+    return readFloatFromUart(uart_filestream);
+}
+
+int requestKeyToUart(int uart_filestream, unsigned char code){
+    unsigned char package[7] = {0x01, 0x23, code, 0x00, 0x09, 0x00, 0x03};
+    short crc = calcula_CRC(package, 7);
+    int resultInt = 0;
+    float resultFloat = 0.0;
+
+    unsigned char message[9];
+    memcpy(message, &package, 7);
+    memcpy(&message[7], &crc, 2);
+    int check = write(uart_filestream, &message[0], 9);
+    if(check < 0){
+        printf("Ocorreu um erro na comunicação com o UART\n");
+    }
+    sleep(1);
+    
+    return readIntFromUart(uart_filestream);
 }
 
 void sendToUart(int uart_filestream, int code, int value) {

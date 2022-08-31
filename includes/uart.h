@@ -1,5 +1,6 @@
 extern int initUart();
-extern float requestToUart(int, unsigned char, int);
+extern float requestTemperatureToUart(int, unsigned char);
+extern float requestKeyToUart(int, unsigned char);
 extern void sendToUart(int, int, unsigned char);
 #define TEMP_INT 0xC1
 #define TEMP_REF 0XC2

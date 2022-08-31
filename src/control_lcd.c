@@ -60,7 +60,7 @@ void typeInt(int i)   {
 }
 
 // clr lcd go home loc 0x80
-void ClrLcd(void)   {
+void clrLcd(void)   {
   lcd_byte(0x01, LCD_CMD);
   lcd_byte(0x02, LCD_CMD);
 }
