@@ -27,7 +27,7 @@ int main(int argc, const char * argv[]) {
     lcd_init();
     bme_connection = connectBme();
 
-    initSystem();
+    //initSystem();
     // THREADS
     pthread_t tid[2];
 
@@ -55,10 +55,10 @@ int main(int argc, const char * argv[]) {
 void initSystem() {
     unsigned char buffer[100];
     read(uart0_filestream, buffer, 100);
-    sendToUart(uart0_filestream, CONTROL_SIGNAL, 0);
-    sendToUart(uart0_filestream, SYSTEM_STATE, 0);
-    sendToUart(uart0_filestream, WORKING_STATE, 0);
-    sendToUart(uart0_filestream, TIMER, 0);
+    sendIntToUart(uart0_filestream, CONTROL_SIGNAL, 0);
+    sendByteToUart(uart0_filestream, SYSTEM_STATE, 0);
+    sendByteToUart(uart0_filestream, WORKING_STATE, 0);
+    sendIntToUart(uart0_filestream, TIMER, 0);
 }
 
 void finishProgram() {

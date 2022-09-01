@@ -13,15 +13,15 @@ void listenCommands() {
     while (1) {
         int command = requestKeyToUart(uart0_filestream, USER_COMM);
 
-        if (command == 1) {sendToUart(uart0_filestream, SYSTEM_STATE, 1);printSystemOn();}
-        else if (command == 2) sendToUart(uart0_filestream, SYSTEM_STATE, 0);
-        else if (command == 3) {sendToUart(uart0_filestream, WORKING_STATE, 1); WORKING = 1;}
-        else if (command == 4) sendToUart(uart0_filestream, WORKING_STATE, 0);
-        else if (command == 5) sendToUart(uart0_filestream, TIMER, ++timer);
-        else if (command == 6) sendToUart(uart0_filestream, TIMER, --timer);
+        if (command == 1) {sendByteToUart(uart0_filestream, SYSTEM_STATE, 1);printSystemOn();}
+        else if (command == 2) sendByteToUart(uart0_filestream, SYSTEM_STATE, 0);
+        else if (command == 3) {sendByteToUart(uart0_filestream, WORKING_STATE, 1); WORKING = 1;}
+        else if (command == 4) sendByteToUart(uart0_filestream, WORKING_STATE, 0);
+        else if (command == 5) sendIntToUart(uart0_filestream, TIMER, ++timer);
+        else if (command == 6) sendIntToUart(uart0_filestream, TIMER, --timer);
         // else menu
 
-        delay(500);
+        delay(5000);
     }
 }
 
@@ -29,11 +29,11 @@ void startFrying() {
     signal(SIGINT, finishProgram);
 
     while (1) {
-        if (WORKING) {
+        if (1) {
             float TI = getTemperatures(uart0_filestream, bme_connection);
             if (TI > 0) {
                 int pid = pid_controle(TI);
-                sendToUart(uart0_filestream, CONTROL_SIGNAL, pid);
+                sendIntToUart(uart0_filestream, CONTROL_SIGNAL, pid);
                 manage_gpio_devices(pid);
             }
         }
