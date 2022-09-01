@@ -42,10 +42,8 @@ int readIntFromUart(int uart_filestream){
     else {
         buffer[content] = '\0';
         memcpy(&number, &buffer[3], sizeof(int));
-        printf("Inteiro recebido: %d\n", number);
         return number;
     }
-    printf("Inteiro recebido: %d\n", number);
     return number; 
 }
 
@@ -63,18 +61,14 @@ float readFloatFromUart(int uart_filestream) {
     else {
         buffer[content] = '\0';
         memcpy(&number, &buffer[3], sizeof(float));
-        printf("%f\n", number);
         return number;
     }
-    printf("%f\n", number);
     return number; 
 }
 
-float requestTemperatureToUart(int uart_filestream, unsigned char code){
+float requestTemperatureToUart(int uart_filestream, int code){
     unsigned char package[7] = {0x01, 0x23, code, 0x00, 0x09, 0x00, 0x03};
     short crc = calcula_CRC(package, 7);
-    int resultInt = 0;
-    float resultFloat = 0.0;
 
     unsigned char message[9];
     memcpy(message, &package, 7);
@@ -85,14 +79,13 @@ float requestTemperatureToUart(int uart_filestream, unsigned char code){
     }
     sleep(1);
     
-    return readFloatFromUart(uart_filestream);
+    float result = readFloatFromUart(uart_filestream);
+    return result;
 }
 
 int requestKeyToUart(int uart_filestream, unsigned char code){
     unsigned char package[7] = {0x01, 0x23, code, 0x00, 0x09, 0x00, 0x03};
     short crc = calcula_CRC(package, 7);
-    int resultInt = 0;
-    float resultFloat = 0.0;
 
     unsigned char message[9];
     memcpy(message, &package, 7);
@@ -103,11 +96,11 @@ int requestKeyToUart(int uart_filestream, unsigned char code){
     }
     sleep(1);
     
-    return readIntFromUart(uart_filestream);
+    int result = readIntFromUart(uart_filestream);
+    return result;
 }
 
 void sendToUart(int uart_filestream, int code, int value) {
-    printf("%d\n", code);
     unsigned char package[7] = {0x01, 0x16, code, 0x00, 0x09, 0x00, 0x03};
     unsigned char message[13];
 

@@ -17,6 +17,7 @@ struct bme280_dev bme_connection;
 int uart0_filestream;
 
 void finishProgram();
+void initSystem();
 
 int main(int argc, const char * argv[]) {
 
@@ -26,9 +27,16 @@ int main(int argc, const char * argv[]) {
     lcd_init();
     bme_connection = connectBme();
 
+    initSystem();
     // THREADS
     pthread_t tid[2];
 
+    // while(1){float TI = requestTemperatureToUart(uart0_filestream, TEMP_INT);
+    // float TR = requestTemperatureToUart(uart0_filestream, TEMP_REF);
+
+    // printf("Temperatura Interna: %.2f\n", TI);
+    // printf("Temperatura Referencia: %.2f\n", TR);}
+    
     pthread_create(&tid[0], NULL, (void *)listenCommands, (void *)NULL); // Escuta os comandos via UART
     pthread_create(&tid[1], NULL, (void *)startFrying, (void *)NULL);
 
@@ -42,6 +50,15 @@ int main(int argc, const char * argv[]) {
     
     // ENCERRAMENTO
    return 0;
+}
+
+void initSystem() {
+    unsigned char buffer[100];
+    read(uart0_filestream, buffer, 100);
+    sendToUart(uart0_filestream, CONTROL_SIGNAL, 0);
+    sendToUart(uart0_filestream, SYSTEM_STATE, 0);
+    sendToUart(uart0_filestream, WORKING_STATE, 0);
+    sendToUart(uart0_filestream, TIMER, 0);
 }
 
 void finishProgram() {

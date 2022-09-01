@@ -129,7 +129,7 @@ void lcd_init()   {
 
 // Código autoral
 
-void printTemperatures(float TI, float TR, float TE)   {
+void printTemperatures(float TI, float TR, float TE) {
   lcdLoc(LINE1);
   typeln("TI:");
   typeFloat(TI);
@@ -138,6 +138,15 @@ void printTemperatures(float TI, float TR, float TE)   {
   lcdLoc(LINE2);
   typeln("TE:");
   typeFloat(TE);
+
+  delay(1000);
+}
+
+void printSystemOn() {
+  lcdLoc(LINE1);
+  typeln("SISTEMA");
+  lcdLoc(LINE2);
+  typeln("LIGADO!");
 
   delay(1000);
 }

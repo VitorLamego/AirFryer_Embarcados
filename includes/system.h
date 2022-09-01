@@ -1,3 +1,4 @@
 extern void listenCommands(void);
 extern void startFrying(void);
-extern timer;
+extern int timer;
+extern int WORKING;
