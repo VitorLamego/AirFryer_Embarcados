@@ -4,6 +4,8 @@
 #include <signal.h>
 
 int WORKING = 0;
+int ON = 1;
+int START_TIMER = 0;
 
 int timer = 0;
 
@@ -16,7 +18,6 @@ void listenCommands() {
 
         printf("Inteiro recebido: %d\n", command);
         controlCommand(command);
-        // else menu
         command = 0;
         delay(500);
     }
@@ -38,10 +39,49 @@ void startFrying() {
 }
 
 void controlCommand(int command) {
-    if (command == 1) {sendByteToUart(uart0_filestream, SYSTEM_STATE, 1);printSystemOn();}
-    else if (command == 2) sendByteToUart(uart0_filestream, SYSTEM_STATE, 0);
-    else if (command == 3) {sendByteToUart(uart0_filestream, WORKING_STATE, 1); WORKING = 1; startFrying();}
-    else if (command == 4) {sendByteToUart(uart0_filestream, WORKING_STATE, 0); WORKING = 0;}
-    else if (command == 5) sendIntToUart(uart0_filestream, TIMER, ++timer);
-    else if (command == 6) sendIntToUart(uart0_filestream, TIMER, --timer);
+    printf("Inteiro checado: %d\n", command);
+    if (command == 1) {
+        printf("Entrei no envio de ON\n");
+        ON = 1;
+        // sendByteToUart(uart0_filestream, SYSTEM_STATE, 1); 
+        printSystemOn();
+    }
+    else if (command == 2) {
+        ON = 0;
+        sendByteToUart(uart0_filestream, SYSTEM_STATE, 0);
+        printSystemOff();
+    }
+    else if (command == 3 && !WORKING) {
+        sendByteToUart(uart0_filestream, WORKING_STATE, 1); 
+        WORKING = 1; 
+        startFrying();
+    }
+    else if (command == 4 && ON) {
+        sendByteToUart(uart0_filestream, WORKING_STATE, 0); 
+        WORKING = 0;
+    }
+    else if (command == 5 && ON) {
+        sendIntToUart(uart0_filestream, TIMER, ++timer);
+    }
+    else if (command == 6 && ON) {
+        sendIntToUart(uart0_filestream, TIMER, --timer);
+    }
+}
+
+void controlTimer() {
+    signal(SIGINT, finishProgram);
+
+    while (1) {
+        while (START_TIMER && timer > 0) {
+        delay(60000);
+        timer--;
+        sendIntToUart(uart0_filestream, TIMER, timer);
+        if (timer == 0) {
+            START_TIMER = 0;
+            sendByteToUart(uart0_filestream, WORKING_STATE, 0); 
+            WORKING = 0;
+            printFryingFinished();
+        }
+    }
+    }
 }

@@ -32,10 +32,10 @@ int main(int argc, const char * argv[]) {
     pthread_t tid[2];
     
     pthread_create(&tid[0], NULL, (void *)listenCommands, (void *)NULL); // Escuta os comandos via UART
-    // pthread_create(&tid[1], NULL, (void *)startFrying, (void *)NULL);
+    pthread_create(&tid[1], NULL, (void *)controlTimer, (void *)NULL);
 
     pthread_join(tid[0], NULL);
-    // pthread_join(tid[1], NULL);
+    pthread_join(tid[1], NULL);
         
     
     // ENCERRAMENTO
@@ -49,6 +49,7 @@ void initSystem() {
     sendByteToUart(uart0_filestream, SYSTEM_STATE, 0);
     sendByteToUart(uart0_filestream, WORKING_STATE, 0);
     sendIntToUart(uart0_filestream, TIMER, 0);
+    printSystemOff();
 }
 
 void finishProgram() {

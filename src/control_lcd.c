@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../includes/system.h"
+
 // Define some device parameters
 #define I2C_ADDR   0x27 // I2C device address
 
@@ -136,17 +138,36 @@ void printTemperatures(float TI, float TR, float TE) {
   typeln("TR:");
   typeFloat(TR);
   lcdLoc(LINE2);
-  typeln("TE:");
-  typeFloat(TE);
+  typeln("Tempo:");
+  typeFloat(timer);
 
   delay(1000);
 }
 
 void printSystemOn() {
+  clrLcd();
   lcdLoc(LINE1);
-  typeln("SISTEMA");
+  typeln("SISTEMA LIGADO!");
+
+  delay(1000);
+}
+
+void printSystemOff() {
+  clrLcd();
+  lcdLoc(LINE1);
+  typeln("     SISTEMA    ");
   lcdLoc(LINE2);
-  typeln("LIGADO!");
+  typeln("   DESLIGADO!   ");
+
+  delay(1000);
+}
+
+void printFryingFinished() {
+  clrLcd();
+  lcdLoc(LINE1);
+  typeln("   AQUECIMENTO  ");
+  lcdLoc(LINE2);
+  typeln("   FINALIZADO!  ");
 
   delay(1000);
 }

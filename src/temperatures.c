@@ -11,6 +11,7 @@
 #include "../includes/bme280.h"
 #include "../includes/control_lcd.h"
 #include "../includes/pid.h"
+#include "../includes/system.h"
 
 int i2c_filestream;
 
@@ -67,7 +68,13 @@ float getTemperatures(int uart0_filestream, struct bme280_dev *dev) {
     float TE = getCurrentTemperature(dev);
 
     if (TR > 0) pid_atualiza_referencia(TR);
-    if (TI> 0 && TR >0 && TE>0) printTemperatures(TI, TR, TE);
+    if (TI> 0 && TR >0 && TE>0) {
+      printTemperatures(TI, TR, TE);
+      if (TR <= TI) {
+        printf("Temperatura Alcancada! Iniciar temporizador");
+        START_TIMER = 1;
+      }
+    }
     return TI;
 }
 
