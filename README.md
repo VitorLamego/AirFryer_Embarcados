@@ -4,6 +4,7 @@ Programa referente ao Trabalho 2 da disciplina de Sistemas Embarcos, referente a
 
 ## Como executar
 
+Rodar na Raspberry 44!
 Após clonar o repositório, acesse a pasta do projeto, e no local onde tem o arquivo "Makefile" rode os seguintes comandos:
 
 ```
