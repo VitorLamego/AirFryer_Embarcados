@@ -10,5 +10,6 @@ extern void sendByteToUart(int, int, char);
 #define CONTROL_SIGNAL 0XD1
 #define REFERENCE_SIGNAL 0XD2
 #define SYSTEM_STATE 0XD3
+#define CTR_TEMPERATURE 0XD4
 #define WORKING_STATE 0XD5
 #define TIMER 0XD6
