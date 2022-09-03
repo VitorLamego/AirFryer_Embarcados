@@ -1,7 +1,9 @@
 #include "../includes/main.h"
 #include "../includes/uart.h"
 #include "../includes/temperatures.h"
+#include "../includes/control_lcd.h"
 #include <signal.h>
+#include <string.h>
 
 int WORKING = 0;
 int ON = 0;
@@ -9,9 +11,19 @@ int START_TIMER = 0;
 int FINISHED_PROCESS = 0;
 
 int timer = 0;
+int indexMenu = 0;
+
+typedef struct {
+    char nome[10];
+    float TR;
+    int tempo;
+} menu_item; 
+
+menu_item menu_list[3];
 
 void terminalMenu() {
     signal(SIGINT, finishProgram);
+    populateMenuItems();
 
     while (1) {
         FINISHED_PROCESS = 0;
@@ -65,6 +77,7 @@ void controlCommand(int command) {
     if (command == 1) {
         ON = 1;
         sendByteToUart(uart0_filestream, SYSTEM_STATE, 1);
+        clrLcd();
         printSystemOn();
         sendByteToUart(uart0_filestream, WORKING_STATE, 0);
     }
@@ -89,6 +102,14 @@ void controlCommand(int command) {
     }
     else if (command == 6 && ON) {
         sendIntToUart(uart0_filestream, TIMER, --timer);
+    }
+    else if (command == 7 && ON) {
+        printMenuItem(menu_list[indexMenu].nome, (int) menu_list[indexMenu].TR, menu_list[indexMenu].tempo);
+        sendIntToUart(uart0_filestream, TIMER, menu_list[indexMenu].tempo);
+        sendFloatToUart(uart0_filestream, REFERENCE_SIGNAL, menu_list[indexMenu].TR);
+        timer = menu_list[indexMenu].tempo;
+        if (indexMenu == 2) indexMenu = 0;
+        else indexMenu++;
     }
 }
 
@@ -151,4 +172,16 @@ void controlVariablesFromTerminal() {
     sendByteToUart(uart0_filestream, WORKING_STATE, 1); 
     WORKING = 1; 
     startFrying();
+}
+
+void populateMenuItems() {
+    strcpy(menu_list[0].nome, "Frango");
+    menu_list[0].TR = 35.0f;
+    menu_list[0].tempo = 5;
+    strcpy(menu_list[1].nome, "Peixe");
+    menu_list[1].TR = 45.0f;
+    menu_list[1].tempo = 7;
+    strcpy(menu_list[2].nome, "Batata");
+    menu_list[2].TR = 50.0f;
+    menu_list[2].tempo = 2;
 }

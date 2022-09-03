@@ -169,3 +169,16 @@ void printFryingFinished() {
 
   delay(1000);
 }
+
+void printMenuItem(char nome[10], float reference, int tempo) {
+  clrLcd();
+  lcdLoc(LINE1);
+  typeln(nome);
+  typeln(" TR:");
+  typeFloat(reference);
+  lcdLoc(LINE2);
+  typeln("Tempo:");
+  typeInt(tempo);
+
+  delay(1000);
+}

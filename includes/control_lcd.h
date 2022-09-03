@@ -5,3 +5,4 @@ void printFloat(float);
 void clrLcd(void);
 void printSystemOff();
 void printFryingFinished();
+void printMenuItem(char[10], float, int);
