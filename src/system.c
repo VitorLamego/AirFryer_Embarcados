@@ -67,11 +67,11 @@ void terminalMenu() {
 
 void coolDownSystem() {
     float TE = getCurrentTemperature(bme_connection);
-    float TI = getTemperatures(uart0_filestream, bme_connection);
+    float TI = getTemperatures(uart0_filestream, bme_connection, TE);
 
     while (TI > TE - 5) {
         if (TE <= 0) TE = getCurrentTemperature(bme_connection);
-        TI = getTemperatures(uart0_filestream, bme_connection);
+        TI = getTemperatures(uart0_filestream, bme_connection, TE);
         if (TI > 0) {
             pid_atualiza_referencia(TE);
             int pid = pid_controle(TI);
@@ -84,7 +84,7 @@ void coolDownSystem() {
 void startFrying() {
     clrLcd();
     while (WORKING) {
-        float TI = getTemperatures(uart0_filestream, bme_connection);
+        float TI = getTemperatures(uart0_filestream, bme_connection, 0.0);
         if (TI > 0) {
             int pid = pid_controle(TI);
             sendIntToUart(uart0_filestream, CONTROL_SIGNAL, pid);
