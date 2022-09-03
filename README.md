@@ -27,7 +27,7 @@ Tempo: 2 minutos
 ```
 
 <p align="center">
-  <img src="./images/Teste1.png" width="350" title="hover text">
+  <img src="./images/Teste1.png" width="500" title="hover text">
 </p>
 
 ```
@@ -37,16 +37,19 @@ Tempo: 3 minutos
 ```
 
 <p align="center">
-  <img src="./images/Teste 2 - Pre.png" width="350" title="hover text">
-  <img src="./images/Teste 2 - Aquecimento.png" width="350" title="hover text">
+  <img src="./images/Teste 2 - Pre.png" width="500" title="hover text">
+  <img src="./images/Teste 2 - Aquecimento.png" width="500" title="hover text">
 </p>
 
 ```
 Teste 3: Realização de aquecimento a partir de menu pré definido
+Comida: Batata
+Tempo: 2 minutos
+Temperatura: 50
 ```
 
 <p align="center">
-  <img src="./images/Teste 3.png" width="350" title="hover text">
+  <img src="./images/Teste 3.png" width="500" title="hover text">
 </p>
 
 ## Observação
