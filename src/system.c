@@ -16,7 +16,9 @@ void terminalMenu() {
     while (1) {
         FINISHED_PROCESS = 0;
         int terminal_command = printMenu();
-        printf("%d\n", terminal_command);
+        clrLcd();
+        if(ON == 1) printSystemOn();
+        else printSystemOff();
 
         if (terminal_command == 1) {
             controlVariablesFromTerminal();
@@ -43,6 +45,7 @@ void listenCommands() {
 }
 
 void startFrying() {
+    clrLcd();
     while (WORKING) {
         float TI = getTemperatures(uart0_filestream, bme_connection);
         if (TI > 0) {
@@ -53,7 +56,8 @@ void startFrying() {
         int command = requestKeyToUart(uart0_filestream, USER_COMM);
         if (command != 3) controlCommand(command);
     }
- 
+    printFryingFinished();
+
     delay(1000);
 }
 
@@ -93,6 +97,7 @@ void controlTimer() {
 
     while (1) {
         while (START_TIMER && timer > 0) {
+        printf("INICIANDO TEMPORIZADOR!\n");
         delay(60000);
         timer--;
         sendIntToUart(uart0_filestream, TIMER, timer);
@@ -101,7 +106,6 @@ void controlTimer() {
             sendByteToUart(uart0_filestream, WORKING_STATE, 0); 
             WORKING = 0;
             FINISHED_PROCESS = 1;
-            printFryingFinished();
         }
     }
     }
@@ -129,7 +133,7 @@ void controlVariablesFromTerminal() {
         printf("Temperatura inválida. Digite novamente\n");
         scanf(" %f", &temperatura);
     }
-    printf("Insira o tempo que deseja configurar (1 - 15)");
+    printf("Insira o tempo que deseja configurar (1 - 15): ");
     scanf(" %d", &timer);
     while (timer < 1 || timer > 10) {
         printf("Tempo inválido. Digite novamente: \n");
@@ -137,12 +141,14 @@ void controlVariablesFromTerminal() {
     }
 
     ON = 1;
+    printf("Ligando sistema automaticamente!\n");
+    clrLcd();
+    printSystemOn();
     sendByteToUart(uart0_filestream, SYSTEM_STATE, 1);
     sendFloatToUart(uart0_filestream, REFERENCE_SIGNAL, temperatura);
     sendIntToUart(uart0_filestream, TIMER, timer);
     printf("Iniciando aquecimento!\n");
     sendByteToUart(uart0_filestream, WORKING_STATE, 1); 
     WORKING = 1; 
-    clrLcd();
     startFrying();
 }

@@ -70,7 +70,7 @@ float getTemperatures(int uart0_filestream, struct bme280_dev *dev) {
     if (TR > 0) pid_atualiza_referencia(TR);
     if (TI> 0 && TR >0 && TE>0) {
       printTemperatures(TI, TR, TE);
-      if (TR <= TI - 0.5) {
+      if (TR <= TI + 1) {
         START_TIMER = 1;
       }
     }

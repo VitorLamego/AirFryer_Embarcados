@@ -146,7 +146,6 @@ void printTemperatures(float TI, float TR, float TE) {
 }
 
 void printSystemOn() {
-  clrLcd();
   lcdLoc(LINE1);
   typeln("SISTEMA LIGADO!");
 
@@ -154,7 +153,6 @@ void printSystemOn() {
 }
 
 void printSystemOff() {
-  clrLcd();
   lcdLoc(LINE1);
   typeln("     SISTEMA    ");
   lcdLoc(LINE2);
@@ -164,7 +162,6 @@ void printSystemOff() {
 }
 
 void printFryingFinished() {
-  clrLcd();
   lcdLoc(LINE1);
   typeln("   AQUECIMENTO  ");
   lcdLoc(LINE2);
