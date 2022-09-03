@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     // THREADS
     pthread_t tid[2];
     
-    pthread_create(&tid[0], NULL, (void *)listenCommands, (void *)NULL); // Escuta os comandos via UART
+    pthread_create(&tid[0], NULL, (void *)terminalMenu, (void *)NULL); // Escuta os comandos via UART
     pthread_create(&tid[1], NULL, (void *)controlTimer, (void *)NULL);
 
     pthread_join(tid[0], NULL);

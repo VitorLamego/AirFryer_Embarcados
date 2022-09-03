@@ -23,8 +23,6 @@ void pid_atualiza_referencia(float referencia_){
 }
 
 int pid_controle(double saida_medida){
-    printf("Referencia: %f\n", referencia);
-    printf("Temperatura Interna: %lf\n", saida_medida);
     double erro = referencia - saida_medida;
 
     erro_total += erro; // Acumula o erro (Termo Integral)
@@ -53,6 +51,5 @@ int pid_controle(double saida_medida){
 
     erro_anterior = erro;
     
-    printf("Sinal de Controle: %lf\n", sinal_de_controle);
     return (int) sinal_de_controle;
 }

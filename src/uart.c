@@ -119,6 +119,25 @@ void sendIntToUart(int uart_filestream, int code, int value) {
     sleep(1);
 }
 
+void sendFloatToUart(int uart_filestream, int code, float value) {
+    unsigned char package[7] = {0x01, 0x16, code, 0x00, 0x09, 0x00, 0x03};
+    unsigned char message[13];
+
+    memcpy(message, &package, 7);
+    memcpy(&message[7], &value, 4);
+
+    short crc = calcula_CRC(message, 11);
+
+    memcpy(&message[11], &crc, 2);
+
+    int check = write(uart_filestream, &message[0], 13);
+
+    if(check < 0){
+        printf("Ocorreu um erro na comunicação com o UART\n");
+    }
+    sleep(1);
+}
+
 void sendByteToUart(int uart_filestream, int code, char value) {
     unsigned char package[7] = {0x01, 0x16, code, 0x00, 0x09, 0x00, 0x03};
     unsigned char message[10];
@@ -135,5 +154,5 @@ void sendByteToUart(int uart_filestream, int code, char value) {
     if(check < 0){
         printf("Ocorreu um erro na comunicação com o UART\n");
     }
-    sleep(1);
+   delay(500);
 }

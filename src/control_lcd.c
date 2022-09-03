@@ -50,7 +50,7 @@ int fd;  // seen by all subroutines
 // float to string
 void typeFloat(float myFloat)   {
   char buffer[20];
-  sprintf(buffer, "%4.2f",  myFloat);
+  sprintf(buffer, "%4.1f",  myFloat);
   typeln(buffer);
 }
 
@@ -135,11 +135,12 @@ void printTemperatures(float TI, float TR, float TE) {
   lcdLoc(LINE1);
   typeln("TI:");
   typeFloat(TI);
-  typeln("TR:");
+  typeln(" TR:");
   typeFloat(TR);
   lcdLoc(LINE2);
   typeln("Tempo:");
-  typeFloat(timer);
+  typeInt((int) timer);
+  typeln(" min");
 
   delay(1000);
 }

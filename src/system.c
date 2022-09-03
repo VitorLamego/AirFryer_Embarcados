@@ -4,19 +4,38 @@
 #include <signal.h>
 
 int WORKING = 0;
-int ON = 1;
+int ON = 0;
 int START_TIMER = 0;
+int FINISHED_PROCESS = 0;
 
 int timer = 0;
 
-void listenCommands() {
+void terminalMenu() {
     signal(SIGINT, finishProgram);
-    int command = 0;
 
     while (1) {
-        command = requestKeyToUart(uart0_filestream, USER_COMM);
+        FINISHED_PROCESS = 0;
+        int terminal_command = printMenu();
+        printf("%d\n", terminal_command);
 
-        printf("Inteiro recebido: %d\n", command);
+        if (terminal_command == 1) {
+            controlVariablesFromTerminal();
+        } else if (terminal_command == 2) {
+            printf("Controle o seu aquecimento pelo dashboard!\n");
+            listenCommands();
+        } else {
+            printf("Alternativa inválida!\n\n");
+        }
+    }
+    
+}
+
+void listenCommands() {
+    
+    int command = 0;
+
+    while (!FINISHED_PROCESS) {
+        command = requestKeyToUart(uart0_filestream, USER_COMM);
         controlCommand(command);
         command = 0;
         delay(500);
@@ -39,12 +58,11 @@ void startFrying() {
 }
 
 void controlCommand(int command) {
-    printf("Inteiro checado: %d\n", command);
     if (command == 1) {
-        printf("Entrei no envio de ON\n");
         ON = 1;
-        // sendByteToUart(uart0_filestream, SYSTEM_STATE, 1); 
+        sendByteToUart(uart0_filestream, SYSTEM_STATE, 1);
         printSystemOn();
+        sendByteToUart(uart0_filestream, WORKING_STATE, 0);
     }
     else if (command == 2) {
         ON = 0;
@@ -53,12 +71,14 @@ void controlCommand(int command) {
     }
     else if (command == 3 && !WORKING) {
         sendByteToUart(uart0_filestream, WORKING_STATE, 1); 
-        WORKING = 1; 
+        WORKING = 1;
+        clrLcd();
         startFrying();
     }
     else if (command == 4 && ON) {
         sendByteToUart(uart0_filestream, WORKING_STATE, 0); 
         WORKING = 0;
+        FINISHED_PROCESS = 1;
     }
     else if (command == 5 && ON) {
         sendIntToUart(uart0_filestream, TIMER, ++timer);
@@ -80,8 +100,49 @@ void controlTimer() {
             START_TIMER = 0;
             sendByteToUart(uart0_filestream, WORKING_STATE, 0); 
             WORKING = 0;
+            FINISHED_PROCESS = 1;
             printFryingFinished();
         }
     }
     }
+}
+
+int printMenu() {
+    int terminal_command;
+
+    printf("========== AIR FRYER ===========\n\n");
+    printf("1. Enviar temperatura e tempo pelo terminal\n");
+    printf("2. Configurar pelo dashboard\n");
+    printf("Ps: Para utilizar o menu pre configurado escolha a opcao 2\n");
+    printf("Digite a sua opcao: ");
+    scanf(" %d", &terminal_command);
+
+    return terminal_command;
+}
+
+void controlVariablesFromTerminal() {
+    float temperatura;
+
+    printf("Insira a temperatura que deseja configurar (30 - 90): ");
+    scanf(" %f", &temperatura);
+    while(temperatura < 30 || temperatura > 90) {
+        printf("Temperatura inválida. Digite novamente\n");
+        scanf(" %f", &temperatura);
+    }
+    printf("Insira o tempo que deseja configurar (1 - 15)");
+    scanf(" %d", &timer);
+    while (timer < 1 || timer > 10) {
+        printf("Tempo inválido. Digite novamente: \n");
+        scanf(" %d", &timer);
+    }
+
+    ON = 1;
+    sendByteToUart(uart0_filestream, SYSTEM_STATE, 1);
+    sendFloatToUart(uart0_filestream, REFERENCE_SIGNAL, temperatura);
+    sendIntToUart(uart0_filestream, TIMER, timer);
+    printf("Iniciando aquecimento!\n");
+    sendByteToUart(uart0_filestream, WORKING_STATE, 1); 
+    WORKING = 1; 
+    clrLcd();
+    startFrying();
 }
