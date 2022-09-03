@@ -4,6 +4,7 @@
 #include <termios.h>
 #include <pthread.h>
 #include <signal.h>
+#include <stdlib.h>
 
 #include "../includes/uart.h"
 #include "../includes/bme280.h"

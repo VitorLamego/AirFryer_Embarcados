@@ -1,1 +1,1 @@
-gcc src/bme280.c src/control_lcd.c src/crc.c src/pid.c src/uart.c src/main.c -lwiringPi -lpthread
+gcc src/bme280.c src/control_lcd.c src/crc.c src/pid.c src/uart.c src/main.c src/bme280.c src/control_lcd.c src/gpio.c src/system.c src/temperatures.c  -lwiringPi -lpthread

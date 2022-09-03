@@ -1,4 +1,4 @@
-#include "gpio.h"
+#include "../includes/gpio.h"
 
 void setup_gpio() {
   wiringPiSetup();

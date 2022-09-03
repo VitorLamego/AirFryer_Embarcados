@@ -154,5 +154,5 @@ void sendByteToUart(int uart_filestream, int code, char value) {
     if(check < 0){
         printf("Ocorreu um erro na comunicação com o UART\n");
     }
-   delay(500);
+   sleep(0.5);
 }

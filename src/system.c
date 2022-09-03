@@ -2,8 +2,11 @@
 #include "../includes/uart.h"
 #include "../includes/temperatures.h"
 #include "../includes/control_lcd.h"
+#include "../includes/pid.h"
+#include "../includes/gpio.h"
 #include <signal.h>
 #include <string.h>
+#include <stdio.h>
 
 int WORKING = 0;
 int ON = 0;
@@ -21,6 +24,23 @@ typedef struct {
 } menu_item; 
 
 menu_item menu_list[3];
+
+void populateMenuItems();
+int printMenu();
+void controlVariablesFromTerminal();
+void controlCommand(int);
+
+void listenCommands() {
+    
+    int command = 0;
+
+    while (!FINISHED_PROCESS) {
+        command = requestKeyToUart(uart0_filestream, USER_COMM);
+        controlCommand(command);
+        command = 0;
+        delay(500);
+    }
+}
 
 void terminalMenu() {
     signal(SIGINT, finishProgram);
@@ -43,18 +63,6 @@ void terminalMenu() {
         }
     }
     
-}
-
-void listenCommands() {
-    
-    int command = 0;
-
-    while (!FINISHED_PROCESS) {
-        command = requestKeyToUart(uart0_filestream, USER_COMM);
-        controlCommand(command);
-        command = 0;
-        delay(500);
-    }
 }
 
 void coolDownSystem() {
