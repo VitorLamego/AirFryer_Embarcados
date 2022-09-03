@@ -26,21 +26,28 @@ Temperatura: 35
 Tempo: 2 minutos
 ```
 
-("./images/Teste1.png")
+<p align="center">
+  <img src="./images/Teste1.png" width="350" title="hover text">
+</p>
 
 ```
 Teste 2: Realização de aquecimento a partir do controle pelo terminal
 Temperatura: 40
 Tempo: 3 minutos
 ```
-("./images/Teste 2 - Pre.png")
-("./images/Teste 2 - Aquecimento.png")
+
+<p align="center">
+  <img src="./images/Teste 2 - Pre.png" width="350" title="hover text">
+  <img src="./images/Teste 2 - Aquecimento.png" width="350" title="hover text">
+</p>
 
 ```
 Teste 3: Realização de aquecimento a partir de menu pré definido
 ```
 
-("./images/Teste 3.png)
+<p align="center">
+  <img src="./images/Teste 3.png" width="350" title="hover text">
+</p>
 
 ## Observação
 
