@@ -69,7 +69,7 @@ void coolDownSystem() {
     float TE = getCurrentTemperature(bme_connection);
     float TI = getTemperatures(uart0_filestream, bme_connection, TE);
 
-    while (TI > TE - 5 && WORKING) {
+    while (TI > TE - 5 && ON) {
         if (TE <= 0) TE = getCurrentTemperature(bme_connection);
         TI = getTemperatures(uart0_filestream, bme_connection, TE);
         if (TI > 0) {

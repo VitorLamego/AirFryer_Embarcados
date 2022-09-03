@@ -46,6 +46,8 @@ Teste 3: Realização de aquecimento a partir de menu pré definido
 Comida: Batata
 Tempo: 2 minutos
 Temperatura: 50
+
+* Não deu pra pegar uma grande parte do resfriamento no print, só o início, por que tinha muita gente na fila
 ```
 
 <p align="center">
