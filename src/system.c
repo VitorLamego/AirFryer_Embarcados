@@ -9,6 +9,7 @@ int WORKING = 0;
 int ON = 0;
 int START_TIMER = 0;
 int FINISHED_PROCESS = 0;
+int COOL_DOWN = 0;
 
 int timer = 0;
 int indexMenu = 0;
@@ -56,6 +57,22 @@ void listenCommands() {
     }
 }
 
+void coolDownSystem() {
+    float TE = getCurrentTemperature(bme_connection);
+    float TI = getTemperatures(uart0_filestream, bme_connection);
+
+    while (TI > TE - 5) {
+        if (TE <= 0) TE = getCurrentTemperature(bme_connection);
+        TI = getTemperatures(uart0_filestream, bme_connection);
+        if (TI > 0) {
+            pid_atualiza_referencia(TE);
+            int pid = pid_controle(TI);
+            sendIntToUart(uart0_filestream, CONTROL_SIGNAL, pid);
+            manage_gpio_devices(pid);
+        }
+    }
+}
+
 void startFrying() {
     clrLcd();
     while (WORKING) {
@@ -69,7 +86,10 @@ void startFrying() {
         if (command != 3) controlCommand(command);
     }
     printFryingFinished();
-
+    COOL_DOWN = 1;
+    printf("Resfriando sistema! Aguarde.\n");
+    coolDownSystem();
+    COOL_DOWN = 0;
     delay(1000);
 }
 
@@ -118,7 +138,6 @@ void controlTimer() {
 
     while (1) {
         while (START_TIMER && timer > 0) {
-        printf("INICIANDO TEMPORIZADOR!\n");
         delay(60000);
         timer--;
         sendIntToUart(uart0_filestream, TIMER, timer);

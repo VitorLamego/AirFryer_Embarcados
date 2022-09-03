@@ -132,16 +132,31 @@ void lcd_init()   {
 // Código autoral
 
 void printTemperatures(float TI, float TR, float TE) {
-  lcdLoc(LINE1);
-  typeln("TI:");
-  typeFloat(TI);
-  typeln(" TR:");
-  typeFloat(TR);
-  lcdLoc(LINE2);
-  typeln("Tempo:");
-  typeInt((int) timer);
-  typeln(" min");
-
+  clrLcd();
+  if (COOL_DOWN) {
+    lcdLoc(LINE1);
+    typeln("TI:");
+    typeFloat(TI);
+    typeln(" TE:");
+    typeFloat(TE);
+    lcdLoc(LINE2);
+    typeln("Resfriando!");
+  } 
+  else {
+    lcdLoc(LINE1);
+    typeln("TI:");
+    typeFloat(TI);
+    typeln(" TR:");
+    typeFloat(TR);
+    lcdLoc(LINE2);
+    if (START_TIMER == 1) {
+      typeln("Tempo:");
+      typeInt((int) timer);
+      typeln(" min");
+    } else {
+      typeln("PRE AQUECENDO");
+    }
+  }
   delay(1000);
 }
 

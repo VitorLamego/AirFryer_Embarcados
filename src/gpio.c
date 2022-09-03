@@ -35,7 +35,7 @@ void manage_gpio_devices(int intensity) {
   if (intensity > 0) {
     enable_resistor(intensity);
     disable_fan();
-  } else if (intensity < -40) {
+  } else if (intensity <= -40) {
     enable_fan((int) intensity * (-1));
     disable_resistor();
   } else if (intensity < 0 && intensity > -40) {

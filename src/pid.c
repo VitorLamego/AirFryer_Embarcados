@@ -51,5 +51,6 @@ int pid_controle(double saida_medida){
 
     erro_anterior = erro;
     
+    if (sinal_de_controle > -40 && sinal_de_controle < 0) sinal_de_controle = -40;
     return (int) sinal_de_controle;
 }
